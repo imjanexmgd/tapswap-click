@@ -1,35 +1,38 @@
 import fs from 'node:fs';
 import ora from 'ora';
+import axios from 'axios';
 import { setTimeout, setInterval } from 'node:timers/promises';
 const getAccToken = async (query) => {
   try {
-    const r = await fetch('https://api.tapswap.ai/api/account/login', {
-      method: 'POST',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
-        'Content-Type': 'application/json',
-        'sec-ch-ua':
-          '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
-        'x-app': 'tapswap_server',
-        'sec-ch-ua-mobile': '?1',
-        'x-cv': '1',
-        'sec-ch-ua-platform': '"Android"',
-        Origin: 'https://app.tapswap.club',
-        'X-Requested-With': 'org.telegram.messenger',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        Referer: 'https://app.tapswap.club/',
-        'Accept-Language': 'en,en-US;q=0.9',
-      },
-      body: JSON.stringify({
+    const s = await axios.post(
+      'https://api.tapswap.ai/api/account/login',
+      JSON.stringify({
         init_data: query,
         referrer: '',
         bot_key: 'app_bot_1',
       }),
-    });
-    const data = await r.json();
+      {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
+          'Content-Type': 'application/json',
+          'sec-ch-ua':
+            '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
+          'x-app': 'tapswap_server',
+          'sec-ch-ua-mobile': '?1',
+          'x-cv': '1',
+          'sec-ch-ua-platform': '"Android"',
+          Origin: 'https://app.tapswap.club',
+          'X-Requested-With': 'org.telegram.messenger',
+          'Sec-Fetch-Site': 'cross-site',
+          'Sec-Fetch-Mode': 'cors',
+          'Sec-Fetch-Dest': 'empty',
+          Referer: 'https://app.tapswap.club/',
+          'Accept-Language': 'en,en-US;q=0.9',
+        },
+      }
+    );
+    const data = await s.data;
     return data;
   } catch (error) {
     throw error;
@@ -37,35 +40,36 @@ const getAccToken = async (query) => {
 };
 const click = async (token, clickAmount, date) => {
   try {
-    const r = await fetch('https://api.tapswap.ai/api/player/submit_taps', {
-      method: 'POST',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
-        'Content-Type': 'application/json',
-        'sec-ch-ua':
-          '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
-        'sec-ch-ua-mobile': '?1',
-        Authorization: `Bearer ${token}`,
-        'x-cv': '1',
-        'x-app': 'tapswap_server',
-        'Content-Id': '195676',
-        'sec-ch-ua-platform': '"Android"',
-        Origin: 'https://app.tapswap.club',
-        'X-Requested-With': 'org.telegram.messenger',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        Referer: 'https://app.tapswap.club/',
-        'Accept-Language': 'en,en-US;q=0.9',
-      },
-      body: JSON.stringify({
+    const { data } = await axios.post(
+      'https://api.tapswap.ai/api/player/submit_taps',
+      JSON.stringify({
         taps: clickAmount,
         time: date,
       }),
-    });
-    const data = await r.json();
-    // return
+      {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
+          'Content-Type': 'application/json',
+          'sec-ch-ua':
+            '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
+          'sec-ch-ua-mobile': '?1',
+          Authorization: `Bearer ${token}`,
+          'x-cv': '1',
+          'x-app': 'tapswap_server',
+          'Content-Id': '195676',
+          'sec-ch-ua-platform': '"Android"',
+          Origin: 'https://app.tapswap.club',
+          'X-Requested-With': 'org.telegram.messenger',
+          'Sec-Fetch-Site': 'cross-site',
+          'Sec-Fetch-Mode': 'cors',
+          'Sec-Fetch-Dest': 'empty',
+          Referer: 'https://app.tapswap.club/',
+          'Accept-Language': 'en,en-US;q=0.9',
+        },
+      }
+    );
+    // const data = await r.json();
     return data;
   } catch (error) {
     throw error;
@@ -73,32 +77,34 @@ const click = async (token, clickAmount, date) => {
 };
 const boost = async (token, type) => {
   try {
-    const r = await fetch('https://api.tapswap.ai/api/player/apply_boost', {
-      method: 'POST',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
-        'Content-Type': 'application/json',
-        'sec-ch-ua':
-          '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
-        'sec-ch-ua-mobile': '?1',
-        Authorization: `Bearer ${token}`,
-        'x-cv': '1',
-        'x-app': 'tapswap_server',
-        'sec-ch-ua-platform': '"Android"',
-        Origin: 'https://app.tapswap.club',
-        'X-Requested-With': 'org.telegram.messenger',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        Referer: 'https://app.tapswap.club/',
-        'Accept-Language': 'en,en-US;q=0.9',
-      },
-      body: JSON.stringify({
+    const { data } = await axios.post(
+      'https://api.tapswap.ai/api/player/apply_boost',
+      JSON.stringify({
         type: type == 'energy' ? 'energy' : 'turbo',
       }),
-    });
-    const data = await r.json();
+      {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.6099.144 Mobile Safari/537.36',
+          'Content-Type': 'application/json',
+          'sec-ch-ua':
+            '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
+          'sec-ch-ua-mobile': '?1',
+          Authorization: `Bearer ${token}`,
+          'x-cv': '1',
+          'x-app': 'tapswap_server',
+          'Content-Id': '195676',
+          'sec-ch-ua-platform': '"Android"',
+          Origin: 'https://app.tapswap.club',
+          'X-Requested-With': 'org.telegram.messenger',
+          'Sec-Fetch-Site': 'cross-site',
+          'Sec-Fetch-Mode': 'cors',
+          'Sec-Fetch-Dest': 'empty',
+          Referer: 'https://app.tapswap.club/',
+          'Accept-Language': 'en,en-US;q=0.9',
+        },
+      }
+    );
     if (type == 'energy') {
       console.log(`Succes claim energy`);
     } else {
