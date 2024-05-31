@@ -20,7 +20,7 @@ const getAccToken = async (query) => {
             '"Not_A Brand";v="8", "Chromium";v="120", "Android WebView";v="120"',
           'x-app': 'tapswap_server',
           'sec-ch-ua-mobile': '?1',
-          'x-cv': '1',
+          'x-cv': '608',
           'sec-ch-ua-platform': '"Android"',
           Origin: 'https://app.tapswap.club',
           'X-Requested-With': 'org.telegram.messenger',
