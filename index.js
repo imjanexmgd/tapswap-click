@@ -155,11 +155,8 @@ const boost = async (token, type) => {
     );
     if (type == 'energy') {
       console.log(`Success claim energy refill`);
-      console.log();
     } else {
       console.log(`Succes claim turbo guru boost`);
-      console.log(data.player.boost[1]);
-      console.log();
     }
 
     return data;
@@ -225,12 +222,12 @@ const extractChqResult = async (chq) => {
         console.log(`Login as ${player.full_name}`);
         let energyRefill = player.boost[0].cnt;
         const playerid = player.id;
+        let doClick;
         while (energyRefill >= 0) {
           energyRefill = player.boost[0];
           let energy = player.energy;
           let tapLevel = player.tap_level;
 
-          let doClick;
           while (energy >= tapLevel) {
             const maxClicks = Math.min(150, Math.floor(energy / tapLevel));
             const clickAmount = Math.floor(Math.random() * maxClicks) + 1;
@@ -262,6 +259,34 @@ const extractChqResult = async (chq) => {
               console.log(`No energy `);
               break;
             }
+          }
+        }
+        let boostGuru = player.boost[1].cnt;
+        let claimBoostGuru;
+        if (boostGuru >= 1) {
+          console.log(`Have ${boostGuru} turbo tap`);
+          claimBoostGuru = await boost(access_token, 'turbo');
+          let i = 1;
+          while (true) {
+            doClick = await clicks(access_token, 1, playerid);
+            const json = {
+              totalCLick: padNumber(i, 4),
+              end: player.boost[1].end,
+              currentTurboTap: doClick.player.boost[1].cnt,
+            };
+            console.log(json);
+            if (doClick.player.boost[1].end <= Date.now()) {
+              if (doClick.player.boost[1].cnt >= 1) {
+                claimBoostGuru = await boost(access_token, 'turbo');
+                console.log(
+                  `Current boost guru ${claimBoostGuru.player.boost[1].cnt}`
+                );
+              } else {
+                console.log('no tapping guru');
+                break;
+              }
+            }
+            i++;
           }
         }
         console.log(`process done ${player.full_name} \n \n`);
