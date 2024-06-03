@@ -271,7 +271,7 @@ const extractChqResult = async (chq) => {
             doClick = await clicks(access_token, 1, playerid);
             const json = {
               totalCLick: padNumber(i, 4),
-              end: player.boost[1].end,
+              end: doClick.player.boost[1].end,
               currentTurboTap: doClick.player.boost[1].cnt,
             };
             console.log(json);
